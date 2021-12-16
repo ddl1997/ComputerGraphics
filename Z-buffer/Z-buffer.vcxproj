@@ -150,10 +150,12 @@
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="include\scanline.h" />
     <ClInclude Include="include\utils\buffer.h" />
     <ClInclude Include="include\utils\global.h" />
     <ClInclude Include="include\utils\model.h" />
     <ClInclude Include="include\utils\render.h" />
+    <ClInclude Include="include\utils\visibility.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
