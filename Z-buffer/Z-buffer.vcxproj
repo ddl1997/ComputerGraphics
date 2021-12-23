@@ -152,6 +152,7 @@
   <ItemGroup>
     <ClInclude Include="include\scanline.h" />
     <ClInclude Include="include\utils\buffer.h" />
+    <ClInclude Include="include\utils\camera.h" />
     <ClInclude Include="include\utils\global.h" />
     <ClInclude Include="include\utils\model.h" />
     <ClInclude Include="include\utils\render.h" />

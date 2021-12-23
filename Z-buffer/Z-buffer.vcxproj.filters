@@ -38,8 +38,11 @@
     <ClInclude Include="include\utils\visibility.h">
       <Filter>头文件\utils</Filter>
     </ClInclude>
-    <ClInclude Include="include\scanline.h">
+    <ClInclude Include="include\utils\camera.h">
       <Filter>头文件\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="include\scanline.h">
+      <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
