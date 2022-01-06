@@ -8,17 +8,17 @@ class Camera {
 public:
     Camera()
     {
-        position = Eigen::Vector3f(0.0, 0.0, 0.0);
+        position = Eigen::Vector3f(0.0, 0.0, 3.0);
         rotation = Eigen::Vector3f(0.0, 0.0, -1.0);
-        eyeFov = 45.0;
+        eyeFov = 60.0;
         aspectRatio = 1.0;
         zNear = 0.1;
-        zFar = 2000.0;
+        zFar = 1000.0;
     }
 
-    Eigen::Matrix4f getTransMatrix()
+    Eigen::Matrix4f getTransMatrix(float angle)
     {
-        return getProjectionMatrix() * getViewMatrix() * getModelMatrix(0.0);
+        return getProjectionMatrix() * getViewMatrix() * getModelMatrix(angle);
     }
 
 private:
@@ -32,7 +32,12 @@ private:
 
     Eigen::Matrix4f getModelMatrix(float rotation_angle)
     {
-        Eigen::Matrix4f model = Eigen::Matrix4f::Identity();
+        Eigen::Matrix4f model;
+        float cosAngle = cos(rotation_angle * PI/ 180.0), sinAngle = sin(rotation_angle * PI / 180.0);
+        model << cosAngle, 0, sinAngle, 0,
+            0, 1, 0, 0,
+            -sinAngle, 0, cosAngle, 0,
+            0, 0, 0, 1;
         return model;
     }
 
@@ -71,7 +76,7 @@ private:
             0, 0, 0, 1;
         o_s << 1 / xNear, 0, 0, 0,
             0, 1 / yNear, 0, 0,
-            0, 0, -2 / (zFar - zNear), 0,
+            0, 0, 2 / (zFar - zNear), 0,
             0, 0, 0, 1;
 
         projection = o_s * o_t * p2o;

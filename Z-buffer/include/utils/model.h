@@ -6,6 +6,8 @@
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
+#include "texture.h"
+#include "global.h"
 
 struct vertex {
     Eigen::Vector3f Position;
@@ -16,11 +18,6 @@ struct vertex {
 struct face {
     std::vector<vertex> vertices;
     int edgeSize = 0;
-};
-
-struct texture {
-    unsigned int id;
-    std::string type;
 };
 
 class Mesh {
@@ -43,7 +40,7 @@ public:
     std::vector<Mesh> meshes;
     std::string directory;
 
-    Model(char* path)
+    Model(std::string path)
     {
         loadModel(path);
     }
@@ -51,7 +48,7 @@ private:
     void loadModel(std::string path)
     {
         Assimp::Importer import;
-        const aiScene* scene = import.ReadFile(path, aiProcess_Triangulate | aiProcess_FlipUVs);
+        const aiScene* scene = import.ReadFile(RESOURCEDIR + path, aiProcess_Triangulate | aiProcess_FlipUVs);
 
         if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
         {
@@ -89,8 +86,13 @@ private:
             // 处理顶点位置、法线和纹理坐标
             Eigen::Vector3f pos(mesh->mVertices[i].x, mesh->mVertices[i].y, mesh->mVertices[i].z);
             vertex.Position = pos;
-            Eigen::Vector3f norm(mesh->mNormals[i].x, mesh->mNormals[i].y, mesh->mNormals[i].z);
-            vertex.Normal = norm;
+
+            if (mesh->mNormals) // 网格是否有法向量？
+            {
+                Eigen::Vector3f norm(mesh->mNormals[i].x, mesh->mNormals[i].y, mesh->mNormals[i].z);
+                vertex.Normal = norm;
+            }
+            
             if (mesh->mTextureCoords[0]) // 网格是否有纹理坐标？
             {
                 Eigen::Vector2f tex(mesh->mTextureCoords[0][i].x, mesh->mTextureCoords[0][i].y);
@@ -118,29 +120,26 @@ private:
         }
 
         // 处理材质
-        if (mesh->mMaterialIndex >= 0)
+        /*if (mesh->mMaterialIndex >= 0)
         {
             aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
-            std::vector<texture> diffuseMaps = loadMaterialTextures(material, aiTextureType_DIFFUSE, "texture_diffuse");
+            std::vector<texture> diffuseMaps = loadMaterialTextures(material, aiTextureType_DIFFUSE, TextureType::diffuse);
             textures.insert(textures.end(), diffuseMaps.begin(), diffuseMaps.end());
-            std::vector<texture> specularMaps = loadMaterialTextures(material, aiTextureType_SPECULAR, "texture_specular");
+            std::vector<texture> specularMaps = loadMaterialTextures(material, aiTextureType_SPECULAR, TextureType::specular);
             textures.insert(textures.end(), specularMaps.begin(), specularMaps.end());
-        }
+        }*/
 
         return Mesh(faces, textures);
     }
 
-    std::vector<texture> loadMaterialTextures(aiMaterial* mat, aiTextureType type, std::string typeName)
+    std::vector<texture> loadMaterialTextures(aiMaterial* mat, aiTextureType type, TextureType texType)
     {
         std::vector<texture> textures;
         for (unsigned int i = 0; i < mat->GetTextureCount(type); i++)
         {
             /*aiString str;
             mat->GetTexture(type, i, &str);
-            texture texture;
-            texture.id = TextureFromFile(str.C_Str(), directory);
-            texture.type = typeName;
-            texture.path = str;
+            texture texture(str.C_Str(), texType);
             textures.push_back(texture);*/
         }
         return textures;

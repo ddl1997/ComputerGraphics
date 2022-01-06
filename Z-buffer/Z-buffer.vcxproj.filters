@@ -21,6 +21,12 @@
     <ClCompile Include="main.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="src\scanline.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\texture.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\utils\buffer.h">
@@ -43,6 +49,12 @@
     </ClInclude>
     <ClInclude Include="include\scanline.h">
       <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="include\stb_image.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="include\utils\texture.h">
+      <Filter>头文件\utils</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

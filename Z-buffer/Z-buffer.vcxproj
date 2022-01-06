@@ -126,7 +126,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>opencv_world454d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opencv_world454d.lib;assimp-vc142-mtd.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -148,14 +148,22 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="src\scanline.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="src\texture.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="include\scanline.h" />
+    <ClInclude Include="include\scanline.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="include\stb_image.h" />
     <ClInclude Include="include\utils\buffer.h" />
     <ClInclude Include="include\utils\camera.h" />
     <ClInclude Include="include\utils\global.h" />
     <ClInclude Include="include\utils\model.h" />
     <ClInclude Include="include\utils\render.h" />
+    <ClInclude Include="include\utils\texture.h" />
     <ClInclude Include="include\utils\visibility.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

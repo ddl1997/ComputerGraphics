@@ -34,6 +34,12 @@ public:
         _buf = std::vector<T>(_size, value);
     }
 
+    void init(int size, T value)
+    {
+        _size = size;
+        _buf = std::vector<T>(size, value);
+    }
+
     int size() { return _size; }
 
     /*buffer operator =(const buffer& buf)
@@ -63,7 +69,7 @@ private:
     }
 
 public:
-    buffer2D() : buffer() {};
+    buffer2D() : buffer<T>() {};
 
     buffer2D(int width, int height)
     {
@@ -77,6 +83,14 @@ public:
     {
         width = 0;
         height = 0;
+    }
+
+    void init(int width, int height, T value)
+    {
+        this->_size = width * height;
+        this->_buf = std::vector<T>(this->_size, value);
+        this->width = width;
+        this->height = height;
     }
 
     int getWidth() { return width; }
