@@ -13,5 +13,24 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="源文件\DooSabin">
+      <UniqueIdentifier>{3329e46a-e4ba-441c-8bf2-734d3671c331}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\DooSabin\mesh.cpp">
+      <Filter>源文件\DooSabin</Filter>
+    </ClCompile>
+    <ClCompile Include="src\DooSabin\subdivision.cpp">
+      <Filter>源文件\DooSabin</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\DooSabin\mesh.h">
+      <Filter>源文件\DooSabin</Filter>
+    </ClInclude>
+    <ClInclude Include="src\DooSabin\subdivision.h">
+      <Filter>源文件\DooSabin</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
