@@ -9,6 +9,7 @@ namespace DooSabin {
     struct vertex {
         double x, y, z;
         std::vector<int> f;
+        std::vector<int> e;
     };
 
     struct edge {
@@ -22,11 +23,12 @@ namespace DooSabin {
 
         edgeList() : edges(std::vector<edge>(0)) {};
 
-        void insert(edge e);
+        int insert(edge e);
     };
 
     struct face {
         std::vector<int> v;
+        vertex avg;
     };
 
     class mesh {
@@ -36,7 +38,13 @@ namespace DooSabin {
 
         mesh(std::string filename);
 
-        std::vector<face> subdivise();
+        void subdivise();
+
+        void restruct();
+
+        std::vector<std::vector<double>> getFaceList();
+
+        void toFile(std::string filename);
 
     private:
 

@@ -21,15 +21,15 @@
     <ClCompile Include="src\DooSabin\mesh.cpp">
       <Filter>源文件\DooSabin</Filter>
     </ClCompile>
-    <ClCompile Include="src\DooSabin\subdivision.cpp">
-      <Filter>源文件\DooSabin</Filter>
+    <ClCompile Include="src\main.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\glad.c">
+      <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\DooSabin\mesh.h">
-      <Filter>源文件\DooSabin</Filter>
-    </ClInclude>
-    <ClInclude Include="src\DooSabin\subdivision.h">
       <Filter>源文件\DooSabin</Filter>
     </ClInclude>
   </ItemGroup>
