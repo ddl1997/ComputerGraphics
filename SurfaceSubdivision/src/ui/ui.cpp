@@ -4,7 +4,12 @@ using namespace ui;
 
 subdivisionUI::subdivisionUI()
 {
-    init(800, 600);
+    init(10, 10);
+
+    subdivideType = 0;
+    subdivideMesh = 0;
+    meshImported = false;
+    meshSubdivided = false;
 }
 
 subdivisionUI::subdivisionUI(int width, int height)
@@ -69,12 +74,6 @@ void subdivisionUI::init(int width, int height)
     io.ConfigViewportsNoAutoMerge = true;
     //io.ConfigViewportsNoTaskBarIcon = true;
 
-    // 设置中文字符支持
-    io.Fonts->AddFontDefault();
-    ImFont* font = io.Fonts->AddFontFromFileTTF("c:\\Windows\\Fonts\\simhei.ttf", 18.0f, NULL, io.Fonts->GetGlyphRangesChineseFull());
-    IM_ASSERT(font != NULL);
-    ImGui::GetIO().FontDefault = font;
-
     // Setup Dear ImGui style
     ImGui::StyleColorsDark();
     //ImGui::StyleColorsClassic();
@@ -127,30 +126,93 @@ void subdivisionUI::render()
     ImGui_ImplOpenGL3_NewFrame();
     ImGui_ImplGlfw_NewFrame();
     ImGui::NewFrame();
-    // ------------------------------
 
-    // renderMainMenuBar();
-    // renderMainMenu();
+    displayConfigWindow();
+    displayViewWindow();
 
     ImGui::DockSpaceOverViewport(ImGui::GetMainViewport());
-
-    // Plot some values
-    const float my_values[] = { 0.2f, 0.1f, 1.0f, 0.5f, 0.9f, 2.2f };
-    ImGui::PlotLines("Frame Times", my_values, IM_ARRAYSIZE(my_values));
-
-    // Display contents in a scrolling region
-    ImGui::TextColored(ImVec4(1, 1, 0, 1), "Important Stuff");
-    ImGui::BeginChild("Scrolling");
-    for (int n = 0; n < 50; n++)
-        ImGui::Text("%04d: Some text", n);
-    ImGui::EndChild();
 }
 
 void subdivisionUI::displayConfigWindow()
 {
-    const char* items[] = { "龙眼港(山东威海)","B港口(日本)", "C港口", "D港口" };
+    const char* items[] = { "Catmull-Clark","Doo-Sabin", "Loop" };
+    static int lastType = subdivideType;
     ImGui::PushItemWidth(-1);
-    ImGui::Text("选择港口:");
+    ImGui::Text("Select Subdivide Algorithm:");
     ImGui::Separator();
-    ImGui::ListBox("", &params.BakerPortNumber, items, IM_ARRAYSIZE(items), 4);
+    ImGui::ListBox("type", &subdivideType, items, IM_ARRAYSIZE(items), 3);
+    if (subdivideType != lastType)
+    {
+        meshImported = false;
+        meshSubdivided = false;
+    }
+    
+    const char* catmullClarkMesh[] = { "cube" }; // 适用于Catmull-Clark算法的网格模型（四边形面）
+    const char* dooSabinMesh[] = { "cube", "regular tetrahedron"}; // 适用于Doo-Sabin算法的网格模型
+    const char* loopMesh[] = { "cube", "bunny"}; // 适用于Loop算法的网格模型（三角形面）
+    ImGui::PushItemWidth(-1);
+    ImGui::Text("Select Mesh:");
+    ImGui::Separator();
+    switch (subdivideType)
+    {
+    case 0:
+        ImGui::ListBox("mesh", &subdivideMesh, catmullClarkMesh, IM_ARRAYSIZE(catmullClarkMesh), 3); break;
+    case 1:
+        ImGui::ListBox("mesh", &subdivideMesh, dooSabinMesh, IM_ARRAYSIZE(dooSabinMesh), 3); break;
+    case 2:
+        ImGui::ListBox("mesh", &subdivideMesh, loopMesh, IM_ARRAYSIZE(loopMesh), 3); break;
+    }
+
+    if (ImGui::Button("Import Mesh")) // 导入按钮
+    {
+        std::string filename;
+        switch (subdivideType)
+        {
+        case 0:
+            if (subdivideMesh == 0) filename = "model/cube.obj"; break;
+        case 1:
+            if (subdivideMesh == 0) filename = "model/cube_tri.obj";
+            else if (subdivideMesh == 1) filename = "model/regular_tetrahedron.obj";
+            break;
+        case 2:
+            if (subdivideMesh == 0) filename = "model/cube_tri.obj";
+            else if (subdivideMesh == 1) filename = "model/bunny.obj";
+            break;
+        }
+        division.importMesh(filename, subdivideType);
+        printf("Mesh imported!\n");
+        meshImported = true;
+        meshSubdivided = false;
+    }
+
+    if (meshImported)
+    {
+        static int iterCount = 0; // 细分迭代次数
+        ImGui::InputInt("", &iterCount);
+
+        if (ImGui::Button("Subdivide")) // 细分按钮
+        {
+            division.subdivide(iterCount, subdivideType);
+            printf("Subdivision finished!\n");
+            meshSubdivided = true;
+        }
+
+        if (ImGui::Button("Export")) // 导出按钮
+        {
+            if (meshSubdivided)
+            {
+                if (division.exportFile("model/output/output.obj", subdivideType))
+                    printf("Export finished!\n");
+                else
+                    printf("Export failed!\n");
+            }
+            else
+                printf("No subdivision surface!\n");
+        }
+    }
+}
+
+void subdivisionUI::displayViewWindow()
+{
+
 }

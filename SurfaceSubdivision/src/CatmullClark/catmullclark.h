@@ -45,8 +45,8 @@ namespace CatmullClark {
     };
 
     struct quadrangle {
-        int v[4];
-        int e[4];
+        std::vector<int> v;
+        std::vector<int> e;
         int avgV;
     };
 

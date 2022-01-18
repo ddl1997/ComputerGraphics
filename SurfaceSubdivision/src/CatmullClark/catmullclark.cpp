@@ -40,6 +40,7 @@ mesh::mesh(std::string filename)
         {
             std::vector<std::string> parts;
             split(str, parts, " ");
+            int partSize = parts.size() - 1;
             if (parts[0] == "v")
             {
                 vertices.push_back(vertex{ atof(parts[1].c_str()), atof(parts[2].c_str()), atof(parts[3].c_str()) });
@@ -47,12 +48,12 @@ mesh::mesh(std::string filename)
             else if (parts[0] == "f")
             {
                 quadrangle _q;
-                for (int i = 0; i < 4; i++)
+                for (int i = 0; i < partSize; i++)
                 {
                     std::vector<std::string> _v;
                     split(parts[i + 1], _v, "/");
                     int vIndex = atoi(_v[0].c_str()) - 1;
-                    _q.v[i] = vIndex;
+                    _q.v.push_back(vIndex);
                 }
                 faces.push_back(_q);
             }
@@ -66,20 +67,21 @@ void mesh::construct()
 {
     edges.clear();
 
-    int tSize = faces.size();
-    for (int i = 0; i < tSize; i++)
+    int fSize = faces.size();
+    for (int i = 0; i < fSize; i++)
     {
-        auto _t = &faces[i];
-        for (int j = 0; j < 4; j++)
+        auto _f = &faces[i];
+        int vSize = _f->v.size();
+        for (int j = 0; j < vSize; j++)
         {
-            int cur = _t->v[j], next = _t->v[(j + 1) % 4], opposite = _t->v[(j + 2) % 4];
+            int cur = _f->v[j], next = _f->v[(j + 1) % vSize];
             vertices[cur].f.push_back(i);
             edge adjE;
             adjE.v[0] = cur;
             adjE.v[1] = next;
             adjE.f[0] = i;
             int eIndex = edges.insert(adjE);
-            _t->e[j] = eIndex;
+            _f->e.push_back(eIndex);
             vertices[cur].e.insert(eIndex);
             vertices[next].e.insert(eIndex);
         }
@@ -94,11 +96,16 @@ void mesh::subdivide()
     // 计算新增面点
     for (auto fIter = faces.begin(); fIter != faces.end(); fIter++)
     {
-        double newX = (vertices[fIter->v[0]].x + vertices[fIter->v[1]].x + vertices[fIter->v[2]].x + vertices[fIter->v[3]].x) / 4.0,
-            newY = (vertices[fIter->v[0]].y + vertices[fIter->v[1]].y + vertices[fIter->v[2]].y + vertices[fIter->v[3]].y) / 4.0,
-            newZ = (vertices[fIter->v[0]].z + vertices[fIter->v[1]].z + vertices[fIter->v[2]].z + vertices[fIter->v[3]].z) / 4.0;
+        double newX = 0.0, newY = 0.0, newZ = 0.0;
+        int vSize = fIter->v.size();
+        for (int i = 0; i < vSize; i++)
+        {
+            newX += vertices[fIter->v[i]].x;
+            newY += vertices[fIter->v[i]].y;
+            newZ += vertices[fIter->v[i]].z;
+        }
         fIter->avgV = newVs.size();
-        newVs.push_back(vertex(newX, newY, newZ));
+        newVs.push_back(vertex(newX / 4.0, newY / 4.0, newZ / 4.0));
     }
 
     // 计算新增边点
@@ -167,13 +174,14 @@ void mesh::subdivide()
     // 连接顶点生成新面
     for (auto fIter = faces.begin(); fIter != faces.end(); fIter++)
     {
-        for (int i = 0; i < 4; i++)
+        int vSize = fIter->v.size();
+        for (int i = 0; i < vSize; i++)
         {
             quadrangle newF;
-            newF.v[0] = fIter->v[i] + vOffset;
-            newF.v[1] = edges.edges[fIter->e[i]].newV;
-            newF.v[2] = fIter->avgV;
-            newF.v[3] = edges.edges[fIter->e[(i + 3) % 4]].newV;
+            newF.v.push_back(fIter->v[i] + vOffset);
+            newF.v.push_back(edges.edges[fIter->e[i]].newV);
+            newF.v.push_back(fIter->avgV);
+            newF.v.push_back(edges.edges[fIter->e[(i + vSize - 1) % vSize]].newV);
             newFs.push_back(newF);
         }
     }

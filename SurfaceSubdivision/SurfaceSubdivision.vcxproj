@@ -24,6 +24,7 @@
     <ProjectGuid>{161ee07d-13a3-4e55-a8a7-67fa446c0497}</ProjectGuid>
     <RootNamespace>SurfaceSubdivision</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <ProjectName>SubdivisionSubface</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">

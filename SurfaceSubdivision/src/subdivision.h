@@ -5,17 +5,24 @@
 #include "DooSabin/doosabin.h"
 #include "Loop/loop.h"
 
-enum SubdivideType { CatmullClark, DooSabin, Loop };
-
 class subdivision {
 public:
-    void static subdivide(std::string filename, SubdivideType type)
+    subdivision()
     {
-        switch (type)
-        {
-        case CatmullClark:
-
-        }
+        catmull_clark = nullptr;
+        doo_sabin = nullptr;
+        loop = nullptr;
     }
+
+    void importMesh(std::string filename, int type); // 导入网格
+
+    bool subdivide(int iterCount, int type); // 细分曲面
+
+    bool exportFile(std::string filename, int type); // 导出文件
+
+private:
+    CatmullClark::mesh* catmull_clark;
+    DooSabin::mesh* doo_sabin;
+    Loop::mesh* loop;
 };
 #endif // !SUBDIVISION_H
