@@ -54,7 +54,8 @@ namespace Loop {
 
         void subdivide();
 
-        void restruct();
+        // 重构mesh的数据结构
+        void construct();
 
         void toFile(std::string filename);
 

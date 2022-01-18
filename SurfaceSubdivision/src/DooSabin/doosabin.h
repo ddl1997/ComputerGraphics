@@ -51,7 +51,7 @@ namespace DooSabin {
 
         void subdivide();
 
-        void restruct();
+        void construct();
 
         std::vector<double> getVertices();
 

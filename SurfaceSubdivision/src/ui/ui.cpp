@@ -147,7 +147,7 @@ void subdivisionUI::displayConfigWindow()
         meshSubdivided = false;
     }
     
-    const char* catmullClarkMesh[] = { "cube" }; // 适用于Catmull-Clark算法的网格模型（四边形面）
+    const char* catmullClarkMesh[] = { "cube", "stair" }; // 适用于Catmull-Clark算法的网格模型（四边形面）
     const char* dooSabinMesh[] = { "cube", "regular tetrahedron"}; // 适用于Doo-Sabin算法的网格模型
     const char* loopMesh[] = { "cube", "bunny"}; // 适用于Loop算法的网格模型（三角形面）
     ImGui::PushItemWidth(-1);
@@ -169,7 +169,9 @@ void subdivisionUI::displayConfigWindow()
         switch (subdivideType)
         {
         case 0:
-            if (subdivideMesh == 0) filename = "model/cube.obj"; break;
+            if (subdivideMesh == 0) filename = "model/cube.obj";
+            else if (subdivideMesh == 1) filename = "model/stair.obj";
+            break;
         case 1:
             if (subdivideMesh == 0) filename = "model/cube_tri.obj";
             else if (subdivideMesh == 1) filename = "model/regular_tetrahedron.obj";

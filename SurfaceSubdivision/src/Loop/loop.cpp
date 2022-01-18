@@ -59,10 +59,10 @@ mesh::mesh(std::string filename)
         }
     }
 
-    restruct();
+    construct();
 }
 
-void mesh::restruct()
+void mesh::construct()
 {
     edges.clear();
 
@@ -157,7 +157,7 @@ void mesh::subdivide()
 
     vertices = newVs;
     triangles = newTs;
-    restruct();
+    construct();
 }
 
 void mesh::toFile(std::string filename)

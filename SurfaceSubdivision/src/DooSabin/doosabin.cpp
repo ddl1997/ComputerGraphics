@@ -203,10 +203,10 @@ void mesh::subdivide()
 
     vertices = newV;
     faces = newF;
-    restruct();
+    construct();
 }
 
-void mesh::restruct()
+void mesh::construct()
 {
     edges.edges.clear();
 
