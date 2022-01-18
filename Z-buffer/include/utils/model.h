@@ -22,7 +22,6 @@ struct face {
 
 class Mesh {
 public:
-    /*  网格数据  */
     std::vector<face> faces;
     std::vector<texture> textures;
     /*  函数  */
@@ -36,7 +35,6 @@ public:
 class Model
 {
 public:
-    /*  模型数据  */
     std::vector<Mesh> meshes;
     std::string directory;
 
@@ -48,6 +46,7 @@ private:
     void loadModel(std::string path)
     {
         Assimp::Importer import;
+        // 导入模型时会将mesh中所有面片转化为三角形
         const aiScene* scene = import.ReadFile(RESOURCEDIR + path, aiProcess_Triangulate | aiProcess_FlipUVs);
 
         if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
@@ -56,6 +55,7 @@ private:
         }
         directory = path.substr(0, path.find_last_of('/'));
 
+        //递归地处理mesh
         processNode(scene->mRootNode, scene);
     }
 
@@ -74,6 +74,7 @@ private:
         }
     }
 
+    // 对每个独立的mesh进行处理
     Mesh processMesh(aiMesh* mesh, const aiScene* scene)
     {
         std::vector<vertex> vertices;
@@ -104,7 +105,7 @@ private:
             vertices.push_back(vertex);
         }
 
-        // 处理索引
+        // 处理面
         for (unsigned int i = 0; i < mesh->mNumFaces; i++)
         {
             aiFace mFace = mesh->mFaces[i];
@@ -132,6 +133,7 @@ private:
         return Mesh(faces, textures);
     }
 
+    // 这个函数是在存在多个纹理时进行纹理加载，这个项目中并没有用到这个纹理导入函数
     std::vector<texture> loadMaterialTextures(aiMaterial* mat, aiTextureType type, TextureType texType)
     {
         std::vector<texture> textures;

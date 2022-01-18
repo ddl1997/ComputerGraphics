@@ -4,6 +4,7 @@
 #include <assert.h>
 #include <vector>
 
+// “ªŒ¨buffer¿‡
 template <class T>
 class buffer {
 protected:
@@ -42,11 +43,6 @@ public:
 
     int size() { return _size; }
 
-    /*buffer operator =(const buffer& buf)
-    {
-
-    }*/
-
     T* data() { return _buf.data(); }
 
     T operator [](const int& index) {
@@ -55,6 +51,7 @@ public:
     }
 };
 
+// ∂˛Œ¨buffer£®color°¢depth£©
 template <class T>
 class buffer2D : public buffer<T> {
 private:

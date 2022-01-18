@@ -164,7 +164,6 @@
     <ClInclude Include="include\utils\model.h" />
     <ClInclude Include="include\utils\render.h" />
     <ClInclude Include="include\utils\texture.h" />
-    <ClInclude Include="include\utils\visibility.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

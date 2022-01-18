@@ -21,11 +21,13 @@ public:
         data = nullptr;
     }
 
+    // 读取纹理文件
     bool loadFile(std::string filename, TextureType type);
 
+    // 获取指定位置颜色
     Eigen::Vector3f getColor(int col, int row);
 
 private:
-    unsigned char* data;
+    unsigned char* data; // 纹理数据
 };
 #endif // !TEXTURE_H

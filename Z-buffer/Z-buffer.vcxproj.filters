@@ -41,9 +41,6 @@
     <ClInclude Include="include\utils\model.h">
       <Filter>头文件\utils</Filter>
     </ClInclude>
-    <ClInclude Include="include\utils\visibility.h">
-      <Filter>头文件\utils</Filter>
-    </ClInclude>
     <ClInclude Include="include\utils\camera.h">
       <Filter>头文件\utils</Filter>
     </ClInclude>

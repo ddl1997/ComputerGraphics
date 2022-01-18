@@ -145,12 +145,40 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="src\DooSabin\mesh.cpp" />
+    <ClCompile Include="src\CatmullClark\catmullclark.cpp" />
+    <ClCompile Include="src\DooSabin\doosabin.cpp" />
     <ClCompile Include="src\glad.c" />
+    <ClCompile Include="src\Loop\loop.cpp" />
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\subdivision.cpp" />
+    <ClCompile Include="src\ui\imgui\imgui.cpp" />
+    <ClCompile Include="src\ui\imgui\imgui_draw.cpp" />
+    <ClCompile Include="src\ui\imgui\imgui_impl_glfw.cpp" />
+    <ClCompile Include="src\ui\imgui\imgui_impl_opengl3.cpp" />
+    <ClCompile Include="src\ui\imgui\imgui_tables.cpp" />
+    <ClCompile Include="src\ui\imgui\imgui_widgets.cpp" />
+    <ClCompile Include="src\ui\ui.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\DooSabin\mesh.h" />
+    <ClInclude Include="src\CatmullClark\catmullclark.h" />
+    <ClInclude Include="src\DooSabin\doosabin.h" />
+    <ClInclude Include="src\Loop\loop.h" />
+    <ClInclude Include="src\shader.h" />
+    <ClInclude Include="src\subdivision.h" />
+    <ClInclude Include="src\ui\imgui\imconfig.h" />
+    <ClInclude Include="src\ui\imgui\imgui.h" />
+    <ClInclude Include="src\ui\imgui\imgui_impl_glfw.h" />
+    <ClInclude Include="src\ui\imgui\imgui_impl_opengl3.h" />
+    <ClInclude Include="src\ui\imgui\imgui_impl_opengl3_loader.h" />
+    <ClInclude Include="src\ui\imgui\imgui_internal.h" />
+    <ClInclude Include="src\ui\imgui\imstb_rectpack.h" />
+    <ClInclude Include="src\ui\imgui\imstb_textedit.h" />
+    <ClInclude Include="src\ui\imgui\imstb_truetype.h" />
+    <ClInclude Include="src\ui\ui.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="shader\default.frag" />
+    <None Include="shader\default.vert" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

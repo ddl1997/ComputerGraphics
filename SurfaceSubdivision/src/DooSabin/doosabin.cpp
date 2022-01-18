@@ -1,19 +1,8 @@
-#include "mesh.h"
+#include "doosabin.h"
 #include <fstream>
 #include <sstream>
-#include <set>
 
 using namespace DooSabin;
-
-int edgeCmp(edge a, edge b)
-{
-    if (a.v[0] == b.v[0] && a.v[1] == b.v[1])
-        return 0;
-    else if (a.v[0] < b.v[0] || (a.v[0] == b.v[0] && a.v[1] < b.v[1]))
-        return 1;
-    else
-        return -1;
-}
 
 int edgeList::insert(edge e)
 {
@@ -21,31 +10,29 @@ int edgeList::insert(edge e)
     e.v[0] = v1 < v2 ? v1 : v2;
     e.v[1] = v1 + v2 - e.v[0];
     int index = 0;
+    bool insertTag = false;
     for (auto iter = edges.begin(); iter != edges.end(); iter++)
     {
         switch (edgeCmp(e, *iter))
         {
         case 0:
-            iter->f[1] = e.f[0]; break;
-        case 1:
-            edges.insert(iter, e); break;
+            iter->f[1] = e.f[0]; 
+            insertTag = true;
+            break;
+        /*case 1:
+            edges.insert(iter, e); 
+            insertTag = true;
+            break;*/
         default:
             index++;
         }
+        if (insertTag) break;
+    }
+    if (!insertTag)
+    {
+        edges.push_back(e);
     }
     return index;
-}
-
-void split(const std::string& s, std::vector<std::string>& tokens, const std::string& delimiters = " ")
-{
-    std::string::size_type lastPos = s.find_first_not_of(delimiters, 0);
-    std::string::size_type pos = s.find_first_of(delimiters, lastPos);
-    while (std::string::npos != pos || std::string::npos != lastPos)
-    {
-        tokens.push_back(s.substr(lastPos, pos - lastPos));
-        lastPos = s.find_first_not_of(delimiters, pos);
-        pos = s.find_first_of(delimiters, lastPos);
-    }
 }
 
 mesh::mesh(std::string filename)
@@ -91,8 +78,8 @@ mesh::mesh(std::string filename)
                     _e.v[1] = _f.v[(i + 1) % (pSize - 1)];
                     _e.f[0] = faces.size();
                     int eIndex = edges.insert(_e);
-                    vertices[_e.v[0]].e.push_back(eIndex);
-                    vertices[_e.v[1]].e.push_back(eIndex);
+                    vertices[_e.v[0]].e.insert(eIndex);
+                    vertices[_e.v[1]].e.insert(eIndex);
                 }
                 _f.avg = vertex{ aX / (pSize - 1), aY / (pSize - 1), aZ / (pSize - 1) };
                 faces.push_back(_f);
@@ -101,7 +88,7 @@ mesh::mesh(std::string filename)
     }
 }
 
-void mesh::subdivise()
+void mesh::subdivide()
 {
     std::vector<vertex> newV;
     std::vector<face> newF;
@@ -151,8 +138,11 @@ void mesh::subdivise()
         int index = 0;
         face _f;
 
+        // v0在f0中的新顶点
         while (f0.v[index] != v0) index++;
         _f.v.push_back(vfMap[f0Index][index]);
+
+        // v1在f0中的新顶点
         int _lastVIndex = (index - 1 + f0VSize) % f0VSize,
             _nextVIndex = (index + 1 + f0VSize) % f0VSize;
         if (f0.v[_lastVIndex] == v1)
@@ -160,15 +150,18 @@ void mesh::subdivise()
         else
             _f.v.push_back(vfMap[f0Index][_nextVIndex]);
 
+        // v1在f1中的新顶点
         index = 0;
         while (f1.v[index] != v1) index++;
         _f.v.push_back(vfMap[f1Index][index]);
+
+        // v0在f1中的新顶点
         _lastVIndex = (index - 1 + f1VSize) % f1VSize;
         _nextVIndex = (index + 1 + f1VSize) % f1VSize;
         if (f1.v[_lastVIndex] == v0)
-            _f.v.push_back(vfMap[f0Index][_lastVIndex]);
+            _f.v.push_back(vfMap[f1Index][_lastVIndex]);
         else
-            _f.v.push_back(vfMap[f0Index][_nextVIndex]);
+            _f.v.push_back(vfMap[f1Index][_nextVIndex]);
 
         newF.push_back(_f);
     }
@@ -188,19 +181,22 @@ void mesh::subdivise()
             while (faces[fIndex].v[index] != i) index++;
             _f.v.push_back(vfMap[fIndex][index]);
             visitedF.insert(fIndex);
-            int eSize = vertices[i].e.size();
-            for (int k = 0; k < eSize; k++)
+            bool findNext = false;
+            for (auto eIter = vertices[i].e.begin(); eIter != vertices[i].e.end(); eIter++)
             {
-                int eIndex = vertices[i].e[k], nextFIndex = -1;
+                int eIndex = *eIter, nextFIndex = -1;
                 if (edges.edges[eIndex].f[0] == fIndex)
                     nextFIndex = edges.edges[eIndex].f[1];
                 else if (edges.edges[eIndex].f[1] == fIndex)
                     nextFIndex = edges.edges[eIndex].f[0];
-                if (visitedF.find(nextFIndex) == visitedF.end())
+                if (nextFIndex != -1 && visitedF.find(nextFIndex) == visitedF.end())
+                {
                     fIndex = nextFIndex;
-                else
-                    fIndex = -1;
+                    findNext = true;
+                    break;
+                }
             }
+            if (!findNext) fIndex = -1;
         }
         newF.push_back(_f);
     }
@@ -220,41 +216,50 @@ void mesh::restruct()
         face* _f = &faces[i];
         double aX = 0, aY = 0, aZ = 0;
         int vSize = faces[i].v.size();
-        for (int j = 0; j < vSize; i++)
+        for (int j = 0; j < vSize; j++)
         {
             int vIndex = faces[i].v[j];
             aX += vertices[vIndex].x;
             aY += vertices[vIndex].y;
             aZ += vertices[vIndex].z;
             vertices[vIndex].f.push_back(i);
-            _f->v.push_back(vIndex);
 
             edge _e;
-            _e.v[0] = _f->v[i];
-            _e.v[1] = _f->v[(i + 1) % (vSize - 1)];
+            _e.v[0] = _f->v[j];
+            _e.v[1] = _f->v[(j + 1) % vSize];
             _e.f[0] = i;
             int eIndex = edges.insert(_e);
-            vertices[_e.v[0]].e.push_back(eIndex);
-            vertices[_e.v[1]].e.push_back(eIndex);
+            vertices[_e.v[0]].e.insert(eIndex);
+            vertices[_e.v[1]].e.insert(eIndex);
         }
-        _f->avg = vertex{ aX / (vSize - 1), aY / (vSize - 1), aZ / (vSize - 1) };
+        _f->avg = vertex{ aX / vSize, aY / vSize, aZ / vSize };
     }
 }
 
-std::vector<std::vector<double>> mesh::getFaceList()
+std::vector<double> mesh::getVertices()
 {
-    std::vector<std::vector<double>> faceList;
+    int vSize = vertices.size();
+    std::vector<double> vList;
+    for (int i = 0; i < vSize; i++)
+    {
+        vList.push_back(vertices[i].x);
+        vList.push_back(vertices[i].y);
+        vList.push_back(vertices[i].z);
+    }
+    return vList;
+}
+
+std::vector<std::vector<int>> mesh::getFaceList()
+{
+    std::vector<std::vector<int>> faceList;
     auto fIter = faces.begin();
     for (; fIter != faces.end(); fIter++)
     {
-        std::vector<double> vList;
+        std::vector<int> vList;
         auto vIter = (*fIter).v.begin();
         for (; vIter != (*fIter).v.end(); vIter++)
         {
-            vertex* _v = &vertices[(*vIter)];
-            vList.push_back(_v->x);
-            vList.push_back(_v->y);
-            vList.push_back(_v->z);
+            vList.push_back((*vIter));
         }
         faceList.push_back(vList);
     }
@@ -273,10 +278,15 @@ void mesh::toFile(std::string filename)
         output << "v " + std::to_string(vIter->x) + " " + std::to_string(vIter->y) + " " + std::to_string(vIter->z) << std::endl;
     }
 
-    output << "# Face" << std::endl;
+    output << std::endl << "# Face" << std::endl;
     for (auto fIter = faces.begin(); fIter != faces.end(); fIter++)
     {
-        
+        output << "f";
+        for (auto vIter = (*fIter).v.begin(); vIter != (*fIter).v.end(); vIter++)
+            output << " " + std::to_string((*vIter) + 1);
+        output << std::endl;
     }
+
+    output.close();
 }
 

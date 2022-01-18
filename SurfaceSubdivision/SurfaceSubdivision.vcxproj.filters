@@ -16,21 +16,116 @@
     <Filter Include="源文件\DooSabin">
       <UniqueIdentifier>{3329e46a-e4ba-441c-8bf2-734d3671c331}</UniqueIdentifier>
     </Filter>
+    <Filter Include="源文件\shader">
+      <UniqueIdentifier>{e2da9277-7eca-498b-b2a7-2741aac8283b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\Loop">
+      <UniqueIdentifier>{3bb1ea1c-b749-46fb-a06b-973a3dd0923d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\CatmullClark">
+      <UniqueIdentifier>{b2f67496-644f-4428-ac1d-044bb5b56693}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\ui">
+      <UniqueIdentifier>{cc0313c0-5482-4f07-8f74-0ab0bd911f12}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\ui\imgui">
+      <UniqueIdentifier>{726c6213-9058-4f36-8015-87e90d3db612}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\DooSabin\mesh.cpp">
-      <Filter>源文件\DooSabin</Filter>
-    </ClCompile>
     <ClCompile Include="src\main.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="src\glad.c">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="src\DooSabin\doosabin.cpp">
+      <Filter>源文件\DooSabin</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Loop\loop.cpp">
+      <Filter>源文件\Loop</Filter>
+    </ClCompile>
+    <ClCompile Include="src\CatmullClark\catmullclark.cpp">
+      <Filter>源文件\CatmullClark</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ui\ui.cpp">
+      <Filter>源文件\ui</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ui\imgui\imgui.cpp">
+      <Filter>源文件\ui\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ui\imgui\imgui_impl_glfw.cpp">
+      <Filter>源文件\ui\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ui\imgui\imgui_impl_opengl3.cpp">
+      <Filter>源文件\ui\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ui\imgui\imgui_draw.cpp">
+      <Filter>源文件\ui\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ui\imgui\imgui_tables.cpp">
+      <Filter>源文件\ui\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ui\imgui\imgui_widgets.cpp">
+      <Filter>源文件\ui\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="src\subdivision.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\DooSabin\mesh.h">
+    <ClInclude Include="src\shader.h">
+      <Filter>源文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\DooSabin\doosabin.h">
       <Filter>源文件\DooSabin</Filter>
     </ClInclude>
+    <ClInclude Include="src\Loop\loop.h">
+      <Filter>源文件\Loop</Filter>
+    </ClInclude>
+    <ClInclude Include="src\CatmullClark\catmullclark.h">
+      <Filter>源文件\CatmullClark</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ui\ui.h">
+      <Filter>源文件\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ui\imgui\imconfig.h">
+      <Filter>源文件\ui\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ui\imgui\imgui.h">
+      <Filter>源文件\ui\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ui\imgui\imgui_internal.h">
+      <Filter>源文件\ui\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ui\imgui\imgui_impl_glfw.h">
+      <Filter>源文件\ui\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ui\imgui\imgui_impl_opengl3.h">
+      <Filter>源文件\ui\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ui\imgui\imgui_impl_opengl3_loader.h">
+      <Filter>源文件\ui\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ui\imgui\imstb_rectpack.h">
+      <Filter>源文件\ui\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ui\imgui\imstb_textedit.h">
+      <Filter>源文件\ui\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ui\imgui\imstb_truetype.h">
+      <Filter>源文件\ui\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="src\subdivision.h">
+      <Filter>源文件</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="shader\default.frag">
+      <Filter>源文件\shader</Filter>
+    </None>
+    <None Include="shader\default.vert">
+      <Filter>源文件\shader</Filter>
+    </None>
   </ItemGroup>
 </Project>

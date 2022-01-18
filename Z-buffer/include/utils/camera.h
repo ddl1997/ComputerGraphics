@@ -16,6 +16,7 @@ public:
         zFar = 1000.0;
     }
 
+    // ªÒ»°±‰ªª£®MVP£©æÿ’Û
     Eigen::Matrix4f getTransMatrix(float angle)
     {
         return getProjectionMatrix() * getViewMatrix() * getModelMatrix(angle);

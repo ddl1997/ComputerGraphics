@@ -10,22 +10,14 @@ using namespace std;
 
 int main()
 {
-    /*int width = 800, height = 600;
-    buffer2D<Eigen::Vector3f> buf(width, height);
-    for (int y = 0; y < height; y++)
-        for (int x = 0; x < width; x++)
-        {
-            float color = (x * y * 255.0) / (width * height);
-            buf.set(y, x, Eigen::Vector3f{color, color, color});
-        }*/
-    Model m("Spot/spot_triangulated_good.obj");
-    scanline::scanlineRasterizer sr;
-    Camera c;
+    Model m(MODELFILE); // 导入模型文件
+    scanline::scanlineRasterizer sr; // 创建扫描线着色器
+    Camera c; // 创建相机
     texture t;
-    if (t.loadFile("Spot/spot_texture.png", TextureType::diffuse))
+    if (t.loadFile(TEXTUREFILE, TextureType::diffuse)) // 导入纹理文件
     {
         auto buf = sr.rasterize(m, c, t);
-        renderToImage("test.jpg", buf);
+        renderToImage(OUTPUTFILE, buf);
     }
     else
     {

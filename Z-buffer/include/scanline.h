@@ -12,11 +12,6 @@
 
 namespace scanline {
 
-    /*struct vertex {
-        Eigen::Vector3f v;
-        Eigen::Vector2f tex;
-        Eigen::Vector3f color;
-    };*/
     struct edge {
         float ymax;
         float ymin;
@@ -24,8 +19,6 @@ namespace scanline {
         float dx;
         bool isHorizontal;
     };
-
-    
 
     struct triFace {
         edge edges[3];
@@ -50,6 +43,7 @@ namespace scanline {
             depth.init(IMAGE_WIDTH, IMAGE_HEIGHT, std::numeric_limits<float>::infinity());
         }
 
+        // 对外提供的渲染接口
         buffer2D<Eigen::Vector3f> rasterize(Model m, Camera c, texture tex)
         {
             auto faces = preprocess(m, c);
@@ -61,29 +55,34 @@ namespace scanline {
         buffer2D<Eigen::Vector3f> color;
         buffer2D<float> depth;
 
-        bool edgeCmp(edge a, edge b)
+        static bool edgeCmp(edge a, edge b)
         {
             return (a.ymin < b.ymin) || (a.ymin == b.ymin && a.dx < b.dx);
         }
 
+        // 获取三者之中最大
         float getMaxOfThree(float a, float b, float c)
         {
             return a > b ? (a > c ? a : c) : (b > c ? b : c);
         }
 
+        // 获取三者之中最小
         float getMinOfThree(float a, float b, float c)
         {
             return a < b ? (a < c ? a : c) : (b < c ? b : c);
         }
 
+        // 对面片进行预处理（坐标变换等）
         std::vector<triangle> preprocess(Model m, Camera c);
 
+        // 着色函数
         void render(std::vector<triangle> faces, texture tex);
 
         // 重心坐标插值
         std::tuple<float, float, float> computeBarycentric2D(float x, float y, Eigen::Vector4f v[]);
 
-        Eigen::Vector3f setColor(float x, float y, triangle t, texture tex);
+        // 设置像素颜色
+        void setColor(float x, float y, triangle t, texture tex, float sample_ratio);
     };
 }
 

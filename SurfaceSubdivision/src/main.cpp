@@ -1,6 +1,8 @@
-#include <glad/glad.h>
-#include <GLFW/glfw3.h>
-#include "DooSabin/mesh.h"
+#include "DooSabin/doosabin.h"
+#include "Loop/loop.h"
+#include "CatmullClark/catmullclark.h"
+#include "shader.h"
+#include "ui/ui.h"
 #include <iostream>
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
@@ -12,75 +14,85 @@ const unsigned int SCR_HEIGHT = 600;
 
 int main()
 {
-    // glfw: initialize and configure
-    // ------------------------------
-    glfwInit();
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-
-#ifdef __APPLE__
-    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
-#endif
-
-    // glfw window creation
-    // --------------------
-    GLFWwindow* window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "Surface Subvision", NULL, NULL);
-    if (window == NULL)
+    /*DooSabin::mesh m("model/cube.obj");
+    for (int i = 0; i < 2; i++)
     {
-        std::cout << "Failed to create GLFW window" << std::endl;
-        glfwTerminate();
-        return -1;
+        printf("正在进行第%d次细分……\n", i + 1);
+        m.subdivide();
     }
-    glfwMakeContextCurrent(window);
-    glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
+    m.toFile("subdivided.obj");*/
 
-    // glad: load all OpenGL function pointers
-    // ---------------------------------------
-    if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
+    /*Loop::mesh m("model/spot_triangulated_good.obj");
+    for (int i = 0; i < 1; i++)
     {
-        std::cout << "Failed to initialize GLAD" << std::endl;
-        return -1;
+        printf("正在进行第%d次细分……\n", i + 1);
+        m.subdivide();
     }
+    printf("细分完成!\n");
+    m.toFile("subdivided.obj");*/
 
-    // render loop
-    // -----------
-    while (!glfwWindowShouldClose(window))
+    /*CatmullClark::mesh m("model/cube.obj");
+    for (int i = 0; i < 4; i++)
     {
-        // input
-        // -----
-        processInput(window);
-
-        // render
-        // ------
-        glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT);
-
-        // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
-        // -------------------------------------------------------------------------------
-        glfwSwapBuffers(window);
-        glfwPollEvents();
+        printf("正在进行第%d次细分……\n", i + 1);
+        m.subdivide();
     }
+    printf("细分完成!\n");
+    m.toFile("subdivided.obj");*/
 
-    // glfw: terminate, clearing all previously allocated GLFW resources.
-    // ------------------------------------------------------------------
-    glfwTerminate();
+    ui::subdivisionUI ui;
+
+    //shader s;
+
+    //auto vertices = m.getVertices();
+    //auto indices = m.getFaceList();
+    //unsigned int VBO, VAO, EBO;
+
+    //glGenVertexArrays(1, &VAO);
+    //glGenBuffers(1, &VBO);
+    //glGenBuffers(1, &EBO);
+
+    //glBindVertexArray(VAO);
+    //glBindBuffer(GL_ARRAY_BUFFER, VBO);
+    //glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(double), &vertices[0], GL_STATIC_DRAW);
+    //glVertexAttribPointer(0, 3, GL_DOUBLE, GL_FALSE, 3 * sizeof(double), (void*)0);
+    //glEnableVertexAttribArray(0);
+    //glBindBuffer(GL_ARRAY_BUFFER, 0);
+    //glBindVertexArray(0);
+
+    //// render loop
+    //// -----------
+    //while (!glfwWindowShouldClose(window))
+    //{
+    //    // input
+    //    // -----
+    //    processInput(window);
+
+    //    // render
+    //    // ------
+    //    glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+    //    glClear(GL_COLOR_BUFFER_BIT);
+
+    //    s.use();
+    //    glBindVertexArray(VAO);
+    //    auto fIter = indices.begin();
+    //    for (; fIter != indices.end(); fIter++)
+    //    {
+    //        auto faceIndices = *fIter;
+    //        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+    //        glBufferData(GL_ELEMENT_ARRAY_BUFFER, faceIndices.size() * sizeof(int), &faceIndices[0], GL_STATIC_DRAW);
+    //        glDrawElements(GL_POLYGON, static_cast<unsigned int>(indices.size()), GL_UNSIGNED_INT, 0);
+    //        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+    //    }
+
+    //    // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
+    //    // -------------------------------------------------------------------------------
+    //    glfwSwapBuffers(window);
+    //    glfwPollEvents();
+    //}
+
+    //// glfw: terminate, clearing all previously allocated GLFW resources.
+    //// ------------------------------------------------------------------
+    //glfwTerminate();
     return 0;
-}
-
-// process all input: query GLFW whether relevant keys are pressed/released this frame and react accordingly
-// ---------------------------------------------------------------------------------------------------------
-void processInput(GLFWwindow* window)
-{
-    if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
-        glfwSetWindowShouldClose(window, true);
-}
-
-// glfw: whenever the window size changed (by OS or user resize) this callback function executes
-// ---------------------------------------------------------------------------------------------
-void framebuffer_size_callback(GLFWwindow* window, int width, int height)
-{
-    // make sure the viewport matches the new window dimensions; note that width and 
-    // height will be significantly larger than specified on retina displays.
-    glViewport(0, 0, width, height);
 }
